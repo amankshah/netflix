@@ -24,7 +24,11 @@ export default function Signup() {
         </div>
       
       <div className="form">
-        <input type="email" placeholder='Email Address' name="email"  value={formValues.email} onChange={(e)=> setFormValues()}/>
+        <input type="email" placeholder='Email Address' name="email"  
+        value={formValues.email} 
+        onChange={(e)=> setFormValues({...formValues,[e.target.name]:e.target.value})}/>
+        
+
       {showPassword &&( <input type='password' placeholder='Password' name="password" />)}
 
 
