@@ -2,14 +2,27 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import BackgroundImage from '../components/BackgroundImage';
 import Header from '../components/Header';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { firebaseAuth } from '../utils/firebase-config';
 export default function Signup() {
-  const [showPassword, setShowPassword]= useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState({
     email:"",
     password:"",
-  })
+  });
+
+  const handleSignIn = async ()=>{
+
+    try{
+      const {email, password} = formValues;
+      await createUserWithEmailAndPassword(firebaseAuth,email,password)
+    } catch(err){
+      console.log(err)
+    }
+   
+  }
   return (
-  <Container showPassword={showPassword} className='flex a-center j-between'>
+  <Container  showPassword={showPassword} className='flex a-center j-between'>
     <BackgroundImage />
     <div className="content">
 
@@ -26,16 +39,16 @@ export default function Signup() {
       <div className="form">
         <input type="email" placeholder='Email Address' name="email"  
         value={formValues.email} 
-        onChange={(e)=> setFormValues({...formValues,[e.target.name]:e.target.value})}/>
-        
+       onChange={(e)=> setFormValues({...formValues,[e.target.name]:e.target.value})} />
 
-      {showPassword &&( <input type='password' placeholder='Password' name="password" />)}
+      {showPassword &&( <input type='password' placeholder='Password' name="password" value={formValues.password} 
+       onChange={(e)=> setFormValues({...formValues,[e.target.name]:e.target.value})} />)}
 
 
         {!showPassword && (<button onClick={()=>setShowPassword(true)}>Get Started</button>)}
         
       </div>
-      <button>Log In</button>
+      <button onClick={handleSignIn}>Log In</button>
     </div>
     </div>
   </Container>
